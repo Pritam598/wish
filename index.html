@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Surprise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff758c;
+            --secondary: #ff7eb3;
+            --text: #4a4a4a;
+            --glass: rgba(255, 255, 255, 0.85);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fdf2f4 0%, #fae1e6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: var(--text);
+            padding: 20px; /* Padding for mobile edges */
+        }
+
+        /* Responsive Card Container */
+        #card {
+            width: 100%;
+            max-width: 400px; /* Perfect for mobile and center-aligned on desktop */
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 40px 30px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            z-index: 10;
+            transition: transform 0.5s ease;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem; /* Responsive sizing */
+            color: #d63384;
+            margin-bottom: 15px;
+        }
+
+        /* Mobile specific adjustments */
+        @media (max-width: 480px) {
+            h1 { font-size: 2.2rem; }
+            p { font-size: 0.95rem; }
+            #card { padding: 35px 20px; }
+        }
+
+        p {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            color: #6c757d;
+        }
+
+        /* Elegant Button */
+        #btn-reveal {
+            background: linear-gradient(45deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 15px rgba(255, 117, 140, 0.3);
+            width: 100%; /* Full width on mobile for easier tapping */
+            max-width: 250px;
+            transition: all 0.3s ease;
+        }
+
+        #btn-reveal:active { transform: scale(0.95); }
+
+        /* Secret Message Styles */
+        #secret-message {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease-in;
+        }
+
+        .highlight { color: #d63384; font-weight: 600; }
+
+        /* Floating Animation Layer */
+        .floating-element {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1;
+            animation: floatUp 6s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) translateX(0); opacity: 0; }
+            20% { opacity: 0.7; }
+            100% { transform: translateY(-10vh) translateX(20px); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="card">
+        <div id="intro">
+            <h1>Hey Sis...</h1>
+            <p>I wanted to give you something as unique as you are. Tap below to see your birthday surprise.</p>
+            <button id="btn-reveal" onclick="reveal()">For My Favorite Sister 💖</button>
+        </div>
+
+        <div id="secret-message">
+            <h1>Happy Birthday!</h1>
+            <p>To the best sister in the world. 🌸</p>
+            <p>I'm so lucky to have you. Thanks for always being there, even when I'm being a typical brother!</p>
+            <p class="highlight">Enjoy your special day!</p>
+            <p style="font-size: 0.8rem; margin-top: 20px;">— Made with love by your brother —</p>
+        </div>
+    </div>
+
+    <script>
+        function reveal() {
+            // Smooth transition
+            const intro = document.getElementById('intro');
+            const secret = document.getElementById('secret-message');
+            const card = document.getElementById('card');
+
+            intro.style.display = 'none';
+            secret.style.display = 'block';
+            
+            // Trigger Fade-in
+            setTimeout(() => {
+                secret.style.opacity = '1';
+                card.style.transform = 'translateY(-10px)';
+            }, 50);
+
+            // Change background to more celebratory
+            document.body.style.background = "linear-gradient(135deg, #fff5f7 0%, #ffd1dc 100%)";
+
+            // Start the celebration animation
+            startCelebration();
+        }
+
+        function startCelebration() {
+            const emojis = ['💖', '🌸', '✨', '🎂', '🎈'];
+            setInterval(() => {
+                const element = document.createElement('div');
+                element.className = 'floating-element';
+                element.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                element.style.left = Math.random() * 100 + 'vw';
+                element.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                element.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                document.body.appendChild(element);
+
+                // Clean up memory
+                setTimeout(() => element.remove(), 6000);
+            }, 300);
+        }
+    </script>
+</body>
+</html>
