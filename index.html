@@ -9,111 +9,139 @@
         :root {
             --primary: #ff758c;
             --secondary: #ff7eb3;
-            --text: #4a4a4a;
-            --glass: rgba(255, 255, 255, 0.85);
+            --bg: linear-gradient(135deg, #fce4ec 0%, #ffe1e9 100%);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #fdf2f4 0%, #fae1e6 100%);
+            background: var(--bg);
+            height: 100vh;
+            width: 100vw;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-            color: var(--text);
-            padding: 20px; /* Padding for mobile edges */
+            overflow: hidden;
+            perspective: 1000px;
+            touch-action: none; /* Prevents scrolling during interaction */
         }
 
-        /* Responsive Card Container */
+        /* Animated Background Particles */
+        .bg-circles {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .circle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: floatCircle 15s infinite ease-in-out;
+        }
+
+        /* Glass Card */
         #card {
-            width: 100%;
-            max-width: 400px; /* Perfect for mobile and center-aligned on desktop */
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            width: 90%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             padding: 40px 30px;
             border-radius: 30px;
             text-align: center;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 25px 50px rgba(214, 51, 132, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            animation: cardAppear 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 10;
-            transition: transform 0.5s ease;
+            position: relative;
         }
 
         h1 {
             font-family: 'Dancing Script', cursive;
-            font-size: 2.5rem; /* Responsive sizing */
+            font-size: 2.5rem;
             color: #d63384;
             margin-bottom: 15px;
         }
 
-        /* Mobile specific adjustments */
-        @media (max-width: 480px) {
-            h1 { font-size: 2.2rem; }
-            p { font-size: 0.95rem; }
-            #card { padding: 35px 20px; }
-        }
-
         p {
-            font-size: 1.05rem;
+            font-size: 1rem;
             line-height: 1.6;
             margin-bottom: 25px;
-            color: #6c757d;
+            color: #555;
         }
 
-        /* Elegant Button */
         #btn-reveal {
-            background: linear-gradient(45deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
             color: white;
             border: none;
             padding: 16px 32px;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 600;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 8px 15px rgba(255, 117, 140, 0.3);
-            width: 100%; /* Full width on mobile for easier tapping */
-            max-width: 250px;
-            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(255, 117, 140, 0.3);
+            width: 100%;
+            transition: transform 0.3s;
         }
 
         #btn-reveal:active { transform: scale(0.95); }
 
-        /* Secret Message Styles */
+        /* Hidden Content */
         #secret-message {
             display: none;
             opacity: 0;
-            transition: opacity 1s ease-in;
+            transition: opacity 1s ease;
         }
 
-        .highlight { color: #d63384; font-weight: 600; }
+        .highlight { color: #d63384; font-weight: 600; font-size: 1.1rem; display: block; margin: 10px 0; }
 
-        /* Floating Animation Layer */
-        .floating-element {
+        /* Animations */
+        @keyframes cardAppear {
+            from { opacity: 0; transform: translateY(40px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes floatCircle {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-30px) translateX(20px); }
+        }
+
+        .sparkle {
             position: fixed;
             pointer-events: none;
-            z-index: 1;
-            animation: floatUp 6s linear infinite;
-            opacity: 0.6;
+            z-index: 999;
+            font-size: 14px;
+            animation: fadeOut 1s forwards;
         }
 
-        @keyframes floatUp {
-            0% { transform: translateY(110vh) translateX(0); opacity: 0; }
-            20% { opacity: 0.7; }
-            100% { transform: translateY(-10vh) translateX(20px); opacity: 0; }
+        @keyframes fadeOut {
+            from { opacity: 1; transform: scale(1) translateY(0); }
+            to { opacity: 0; transform: scale(1.5) translateY(-20px); }
+        }
+        
+        .floating-emoji {
+            position: fixed;
+            bottom: -50px;
+            animation: moveUp 5s linear forwards;
+            z-index: 5;
+        }
+
+        @keyframes moveUp {
+            to { transform: translateY(-110vh) rotate(360deg); }
         }
     </style>
 </head>
 <body>
 
+    <div class="bg-circles" id="bgCircles"></div>
+
     <div id="card">
         <div id="intro">
             <h1>Hey Sis...</h1>
-            <p>I wanted to give you something as unique as you are. Tap below to see your birthday surprise.</p>
-            <button id="btn-reveal" onclick="reveal()">For My Favorite Sister 💖</button>
+            <p>I built something small to tell you how much you mean to me.</p>
+            <button id="btn-reveal" onclick="reveal()">Open Your Surprise 💖</button>
         </div>
 
         <div id="secret-message">
@@ -126,43 +154,57 @@
     </div>
 
     <script>
+        // Create Background Circles
+        const bg = document.getElementById('bgCircles');
+        for (let i = 0; i < 10; i++) {
+            const circle = document.createElement('div');
+            circle.className = 'circle';
+            const size = Math.random() * 80 + 40 + 'px';
+            circle.style.width = size;
+            circle.style.height = size;
+            circle.style.left = Math.random() * 100 + 'vw';
+            circle.style.top = Math.random() * 100 + 'vh';
+            circle.style.animationDelay = Math.random() * 5 + 's';
+            bg.appendChild(circle);
+        }
+
         function reveal() {
-            // Smooth transition
-            const intro = document.getElementById('intro');
+            document.getElementById('intro').style.display = 'none';
             const secret = document.getElementById('secret-message');
-            const card = document.getElementById('card');
-
-            intro.style.display = 'none';
             secret.style.display = 'block';
+            setTimeout(() => secret.style.opacity = '1', 50);
+
+            // Trigger Emoji Rain
+            setInterval(spawnEmoji, 300);
+        }
+
+        function spawnEmoji() {
+            const emojis = ['🌸', '💖', '✨', '🎂', '🎈'];
+            const e = document.createElement('div');
+            e.className = 'floating-emoji';
+            e.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+            e.style.left = Math.random() * 100 + 'vw';
+            e.style.fontSize = Math.random() * 20 + 20 + 'px';
+            document.body.appendChild(e);
+            setTimeout(() => e.remove(), 5000);
+        }
+
+        // Sparkle Trail Effect
+        const handleInteraction = (e) => {
+            const x = e.touches ? e.touches[0].clientX : e.clientX;
+            const y = e.touches ? e.touches[0].clientY : e.clientY;
             
-            // Trigger Fade-in
-            setTimeout(() => {
-                secret.style.opacity = '1';
-                card.style.transform = 'translateY(-10px)';
-            }, 50);
+            const s = document.createElement('div');
+            s.className = 'sparkle';
+            s.innerHTML = '✨';
+            s.style.left = x + 'px';
+            s.style.top = y + 'px';
+            document.body.appendChild(s);
+            setTimeout(() => s.remove(), 1000);
+        };
 
-            // Change background to more celebratory
-            document.body.style.background = "linear-gradient(135deg, #fff5f7 0%, #ffd1dc 100%)";
-
-            // Start the celebration animation
-            startCelebration();
-        }
-
-        function startCelebration() {
-            const emojis = ['💖', '🌸', '✨', '🎂', '🎈'];
-            setInterval(() => {
-                const element = document.createElement('div');
-                element.className = 'floating-element';
-                element.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
-                element.style.left = Math.random() * 100 + 'vw';
-                element.style.fontSize = (Math.random() * 20 + 15) + 'px';
-                element.style.animationDuration = (Math.random() * 3 + 4) + 's';
-                document.body.appendChild(element);
-
-                // Clean up memory
-                setTimeout(() => element.remove(), 6000);
-            }, 300);
-        }
+        window.addEventListener('mousemove', handleInteraction);
+        window.addEventListener('touchmove', handleInteraction);
     </script>
 </body>
 </html>
